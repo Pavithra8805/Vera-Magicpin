@@ -1169,6 +1169,17 @@ class BotHandler(BaseHTTPRequestHandler):
         return json.loads(raw.decode("utf-8"))
 
     def do_GET(self) -> None:
+        if self.path in {"/", "/v1"}:
+            self._send_json(
+                200,
+                {
+                    "status": "ok",
+                    "service": "Vera challenge bot",
+                    "routes": ["/v1/healthz", "/v1/metadata", "/v1/context", "/v1/tick", "/v1/reply", "/v1/teardown"],
+                },
+            )
+            return
+
         if self.path == "/v1/healthz":
             self._send_json(
                 200,
