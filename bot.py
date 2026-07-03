@@ -1180,6 +1180,18 @@ class BotHandler(BaseHTTPRequestHandler):
             )
             return
 
+        if self.path in {"/v1/context", "/v1/tick", "/v1/reply", "/v1/teardown"}:
+            self._send_json(
+                405,
+                {
+                    "error": "method_not_allowed",
+                    "path": self.path,
+                    "allowed_methods": ["POST"],
+                    "note": "This endpoint accepts POST requests only.",
+                },
+            )
+            return
+
         if self.path == "/v1/healthz":
             self._send_json(
                 200,
